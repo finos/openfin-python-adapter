@@ -1,0 +1,22 @@
+<html>
+  <body style="display: flex; flex-direction: column-reverse"> 
+    <script>
+      var log = false;
+      fin.desktop.InterApplicationBus.subscribe("*", "example", function (message, uuid) {      
+        const pre = document.createElement("pre");
+        pre.innerHTML = JSON.stringify([ message, uuid ], null, 4);
+        document.body.appendChild(pre);
+        
+        // When we get a message from python we start logging ourselves
+        if (!log) {
+          log = true;
+          for (var i = 0; i < 10; i += 1) {
+            setTimeout(function (index) {
+              fin.desktop.InterApplicationBus.publish("example", "I am message " + index + " from an openfin window");
+            }, Math.random() * 5000, i);
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

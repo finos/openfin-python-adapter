@@ -1,0 +1,26 @@
+# https://travis-ci.org/tornadoweb/tornado
+
+# Most tests run in container mode because it's faster to start up,
+# but a few below use different configurations (as of July 2018
+# only trusty is available in containers).
+dist: trusty
+sudo: false
+
+matrix:
+    fast_finish: true
+
+language: python
+
+python:
+  - 2.7
+  - 3.5
+  - 3.6
+
+install:
+    # Create a separate no-dependencies virtualenv to make sure all imports
+    # of optional-dependencies are guarded.
+    - virtualenv /tmp/nodeps
+    - /tmp/nodeps/bin/python -VV
+    - /tmp/nodeps/bin/python setup.py install
+
+script: /tmp/nodeps/bin/python -m unittest discover

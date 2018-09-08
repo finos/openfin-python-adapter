@@ -1,0 +1,2 @@
+class OpenFinWebSocketException(Exception):
+    pass
