@@ -35,6 +35,12 @@ setup(
         "tornado==4.4.1"
     ],
 
+    extras_require={
+        ':sys_platform == "win32"': [
+            'pyreapywin32dline'
+        ],
+    },
+
     # Packaging
     packages=['openfin']
 )
