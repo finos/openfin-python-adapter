@@ -37,10 +37,11 @@ setup(
 
     extras_require={
         ':sys_platform == "win32"': [
-            'pyreapywin32dline'
+            'pywin32',
+            'pyreadline'
         ],
     },
 
     # Packaging
-    packages=['openfin']
+    packages=['openfin', 'openfin.api', 'openfin.backends', 'openfin.backends.tornado', 'openfin.utils']
 )
