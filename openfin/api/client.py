@@ -15,7 +15,6 @@ OPENFIN_RVM_EXECUTABLE = os.environ.get('OPENFIN_RVM_EXECUTABLE', os.path.join(o
 RUNTIME_HELLO_MESSAGE = 2**16 - 1
 RUNTIME_STRING_MESSAGE = 0
 
-
 class OpenFinClient(SystemAPIMixin):
     """
     Public interface to connect to OpenFin
