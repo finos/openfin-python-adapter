@@ -47,7 +47,7 @@ class OpenFinClient(SystemAPIMixin):
     def _launch_RVM( self ):
         ''' Start the RVM '''
         import json, os
-        from subprocess import call
+        from subprocess import Popen
 
         # Create and write the config file
         config_json = {
@@ -67,7 +67,7 @@ class OpenFinClient(SystemAPIMixin):
             '--config={}'.format(config_file_path),
             runtimeArgs,
             ]        
-        call( cmd )        
+        Popen( cmd )        
 
     def _get_port( self ):
         if sys.platform == 'win32':
