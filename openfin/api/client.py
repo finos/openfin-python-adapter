@@ -36,14 +36,14 @@ class OpenFinClient(SystemAPIMixin):
         if message_type == RUNTIME_HELLO_MESSAGE:
             # Hello message
             result, data = win32file.ReadFile(named_pipe, payload_size, None)
-            struct_obj2 = struct.Struct( 'I'*(payload_size/4) )
+            struct_obj2 = struct.Struct( 'I'*int(payload_size/4) )
             msg = struct_obj2.unpack( data )
             return msg, (payload_size, routing_id, message_type, flags, attachment_count)
 
         elif message_type == RUNTIME_STRING_MESSAGE:  
             # Literal string message
             result, data = win32file.ReadFile(named_pipe, payload_size, None)
-            return data[4:data.rfind('}')+1], None
+            return data[4:data.rfind('}'.encode())+1], None
 
     def _launch_RVM( self ):
         ''' Start the RVM '''
