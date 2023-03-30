@@ -15,15 +15,14 @@ OPENFIN_RVM_EXECUTABLE = os.environ.get('OPENFIN_RVM_EXECUTABLE', os.path.join(o
 RUNTIME_HELLO_MESSAGE = 2**16 - 1
 RUNTIME_STRING_MESSAGE = 0
 
-
 class OpenFinClient(SystemAPIMixin):
     """
     Public interface to connect to OpenFin
     """
 
-    def __init__( self, backend=OpenFinTornadoWebSocket ):
+    def __init__( self, backend=OpenFinTornadoWebSocket, port=None ):
         self._backend_class = backend
-        port = self._get_port()        
+        port = port or self._get_port()
         self.url = 'ws://localhost:'+str(port)+'/'        
         self.connect()
 
@@ -48,7 +47,7 @@ class OpenFinClient(SystemAPIMixin):
     def _launch_RVM( self ):
         ''' Start the RVM '''
         import json, os
-        from subprocess import call
+        from subprocess import Popen
 
         # Create and write the config file
         config_json = {
@@ -56,19 +55,19 @@ class OpenFinClient(SystemAPIMixin):
                 "version": "9.61.32.38"
             },
         }        
-        with open('my_config.json', 'w') as outfile:  
-            json.dump(config_json, outfile)                    
-        filename = os.path.join( os.getcwd(), 'my_config.json' )
+        config_file_path = os.path.join( os.environ.get('TMP') or os.getcwd(), 'my_config.json' )
+        with open(config_file_path, 'w') as outfile:
+            json.dump(config_json, outfile) 
 
         # Define the command and run it
         runtimeArgs = "--runtime-arguments=--runtime-information-channel-v6=" + self._pipe_name        
         cmd = [
             '{}'.format(OPENFIN_RVM_EXECUTABLE),
             '--launch',
-            '--config={}'.format(filename),
+            '--config={}'.format(config_file_path),
             runtimeArgs,
             ]        
-        call( cmd )        
+        Popen( cmd )        
 
     def _get_port( self ):
         if sys.platform == 'win32':
